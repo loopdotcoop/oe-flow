@@ -301,5 +301,6 @@ Changelog
 + 0.1.1-2           ‘Getting Started’ section added to ‘README.md’ from ‘oe-flow-getting-started.md’; 
 + 0.1.1-3           ‘Usage’ section added to ‘README.md’ from ‘git-flow-test-2/README.md’; 
 + 1.0.0-rc.1        minor text amends; 
++ 1.0.0             oe-flow is ready to use; 
 
 
