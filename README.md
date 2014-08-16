@@ -113,7 +113,7 @@ Create a new repository on GitHub:
 - Write a snappy description, 120 characters or less including the period `.` on the end
 - Select “Initialize this repository with a README”
 - Add .gitignore Meteor, for a Meteor project
-- Add GPL v2 License
+- Add GPL v2 license
 
 In the ‘HTTPS clone URL’ sidebar, click ‘Copy to clipboard’
 
@@ -168,15 +168,24 @@ Append the following to ‘README.md’:
 
 
 
+Workflow
+--------
+
+This project uses the [oe-flow](https://github.com/loopdotcoop/oe-flow) development workflow, which is compatible with 
+[git-flow](https://github.com/nvie/gitflow/wiki) and [Semantic Versioning 2.0.0](http://semver.org/).
+
+
+
+
 Changelog
 ---------
 
 +                   Initial commit
-+ 0.0.1-1           create ‘package.json’; add ‘Changelog’ section to README.md; 
++ 0.0.1-1           create ‘package.json’; add ‘Changelog’ and ‘Workflow’ sections to ‘README.md’; 
 ```
 
 Commit the changes:  
-`$ git commit -am '+ 0.0.1-1           create ‘package.json’; add ‘Changelog’ section to README.md; '`
+`$ git commit -am '+ 0.0.1-1           create ‘package.json’; add ‘Changelog’ and ‘Workflow’ sections to ‘README.md’; '`
 
 
 ### Second local commit: `"0.0.1-2"`
@@ -293,7 +302,7 @@ Changelog
 ---------
 
 +                   Initial commit
-+ 0.0.1-1           create ‘package.json’; add ‘Changelog’ section to README.md; 
++ 0.0.1-1           create ‘package.json’; add ‘Changelog’ section to ‘README.md’; 
 + 0.0.1-2           improve .gitgnore; 
 + 0.1.0-rc.1        prepare for initial release; 
 + 0.1.0             ready for initial release; 
@@ -302,5 +311,5 @@ Changelog
 + 0.1.1-3           ‘Usage’ section added to ‘README.md’ from ‘git-flow-test-2/README.md’; 
 + 1.0.0-rc.1        minor text amends; 
 + 1.0.0             oe-flow is ready to use; 
-
++ 1.0.1-1           minor text amends; suggest a ‘Workflow’ section for new projects; 
 
