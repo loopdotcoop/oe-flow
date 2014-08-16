@@ -1,0 +1,12 @@
+{
+  "name": "oe-flow",
+  "version": "0.1.0",
+  "description": "A development workflow compatible with git-flow and Semantic Versioning",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "author": "Loop.Coop <info@loop.coop>",
+  "contributors": [
+  ],
+  "license": "GPL v2"
+}
