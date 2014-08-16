@@ -1,6 +1,6 @@
 {
   "name": "oe-flow",
-  "version": "0.1.1-3",
+  "version": "1.0.0-rc.1",
   "description": "A development workflow compatible with git-flow and Semantic Versioning",
   "scripts": {
     "test": "echo 'Error: no test specified' && exit 1"
