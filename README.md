@@ -14,3 +14,4 @@ Changelog
 + 0.0.1-2           improve .gitgnore; 
 + 0.1.0-rc.1        prepare for initial release; 
 + 0.1.0             ready for initial release; 
++ 0.1.1-1           improve .gitgnore (correction); 
