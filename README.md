@@ -6,6 +6,98 @@ A development workflow compatible with git-flow and Semantic Versioning
 
 
 
+Usage
+-----
+
+[oe-flow](https://github.com/loopdotcoop/oe-flow) follows a subset of [Semantic Versioning 2.0.0](http://semver.org/), combined with the [git-flow](https://github.com/nvie/gitflow/wiki/Command-Line-Arguments) flavor of Vincent Driessen’s [branching model](http://nvie.com/posts/a-successful-git-branching-model/).
+
+
+### Using the ‘develop’ branch
+
+On the __develop__ branch, versions use a pre-release string in one of three forms, `-*`, `-alpha.*`, or `-beta.*`, where `*` is one or more digit:
+
+1. The working directory initially just contains GitHub’s ‘README.md’ file, and    the initial commit message is `Initial commit`
+
+2. ‘package.json’ is then created in the top-level of the working directory, its `"version"` field is set to `"0.0.1-1"`, and the second commit message is `+ 0.0.1-1 create ‘package.json’; add ‘Changelog’ section to README.md; `
+
+3. From then on, the ‘package.json’ `"version"` field must be manually incremented before each commit, `"0.0.1-2"` → `"0.0.1-3"` ... `"0.0.1-146"`
+
+4. At some point, the __develop__ branch is ready for alpha testing. The pre-release string becomes `-alpha.1`, which means the `"version"` field must be bumped `"0.0.1-146"` → `"0.0.1-alpha.1"`. After that it increments before each commit, `"0.0.1-alpha.2"` → `"0.0.1-alpha.3"` ... etc
+
+5. Later on, the __develop__ branch is ready for beta testing, eg `"0.0.1-alpha.29"` → `"0.0.1-beta.1"` → `"0.0.1-beta.2"` ... etc
+
+
+### Using ‘feature’ branches
+
+On a __feature__ branch, versions use a pre-release string in the form `-x.*`, where `x` is all lowercase ASCII letters, and is not `alpha | beta | rc | fix`:
+
+1. `$ git flow feature start zippier` creates a new branch named __feature/zippier__, based on the __develop__ branch, and switches to it
+
+2. ‘package.json’ `"version"` continues to increment on the __develop__ branch, but the new __feature__ branch bumps `"4.3.3-alpha.22"` → `"4.3.3-zippier.1"`
+
+3. So the __develop__ branch continues `"4.3.3-alpha.22"` → `"4.3.3-alpha.23"`, while in parallel the __feature/zippier__ branch increments before each commit, `"4.3.3-zippier.1"` → `"4.3.3-zippier.2"` ... `"4.3.3-zippier.53"`
+
+4. The final __feature__ branch commit must be preceded by replacing the `"version"` field with an incremented __develop__ branch version, so if __develop__ had reached `"4.3.7-14"`, then `"4.3.3-zippier.53"` → `"4.3.7-15"`
+
+5. `$ git flow feature finish zippier` merges the new feature into __develop__, removes the __feature/zippier__ branch, and switches back to __develop__
+
+
+### Using ‘release’ branches
+
+On a __release__ branch, versions use a pre-release string in the form `-rc.*`:
+
+1. Assuming the ‘package.json’ `"version"` field in the __master__ branch is `"1.1.7-beta.53"`, decide whether the release will bump it to `"1.1.8"`, `"1.2.0"` or `"2.0.0"`. For more info, see [semver.org](http://semver.org/)
+
+2. `$ git flow release start 1.2.0` creates a new __release__ branch based on the __develop__ branch named __release/1.2.0__, and switches to it
+
+3. The `"version"` field must be manually bumped `"1.1.7-beta.53"` → `"1.2.0-rc.1"`, and then incremented before each subsequent commit, `"1.2.0-rc.2"` → `"1.2.0-rc.3"` ... `"1.2.0-rc.26"`
+
+4. `-rc.*` must be removed from the `"version"` field, `"1.2.0-rc.41"` → `"1.2.0"`, just before the final __release/1.2.0__ commit
+
+5. `$ git flow release finish 1.2.0` merges __release/1.2.0__ into __master__ and also into __develop__, deletes the __release/1.2.0__ branch, tags the release with __1.2.0__, and switches back to __develop__. `flow` opens Git’s default text editor three times:
+  - __master__ commit text, appends `Merge branch 'release/0.2.0'`
+  - __0.2.0__ tag description
+  - __develop__ commit text, appends `Merge branch 'release/0.2.0' into develop`
+
+  > If using `ed` as GIT\_EDITOR:  
+  > - Enter `a` at the prompt to start appending  
+  > - Write one or more lines of descriptive text  
+  > - Enter just `.` on a line, to get the prompt back  
+  > - Enter `w` at the prompt to write the message to output  
+  > - Enter `q` at the prompt to finish  
+
+6. `$ git push --tags origin master` will update GitHub, including tags
+
+7. Immediately after a release, the __develop__ patch-level is _must_ be bumped, so the  `"version"` field is changed from `"1.2.0"` → `"1.2.1-1"`
+
+
+### Using ‘hotfix’ branches
+
+On a __hotfix__ branch, versions use a pre-release string in the form `-fix.*`:
+
+1. Assuming the ‘package.json’ `"version"` field in the __master__ branch is `"1.2.0"`, decide whether the hotfix will bump it to `"1.2.2"`, `"1.3.0"` or `"2.0.0"`. Generally, a patch-level bump is appropriate for hotfixes
+
+2. `$ git flow hotfix start 1.2.2` creates a new hotfix branch based on the __master__ branch named __hotfix/1.2.2__, and switches to it
+
+3. The `"version"` field must be manually bumped `"1.2.0"` → `"1.2.2-fix.1"`, and then incremented before each subsequent commit, `"1.2.2-fix.1"` → `"1.2.2-fix.2"` ... `"1.2.2-fix.29"`
+
+4. `-fix.*` must be removed from the `"version"` field, `"1.2.2-fix.29"` → `"1.2.2"`, just before the final __release/1.2.2__ commit
+
+5. `$ git flow hotfix finish 1.2.2` merges __hotfix/1.2.2__ into __master__ and also into __develop__, deletes the __release/1.2.0__ branch, tags the release with __1.2.2__, and switches back to __develop__. For help with entering text at this point, see [__Using ‘release’ branches__](#using-release-branches)
+
+6. `$ git push --tags origin master` will update GitHub, including tags
+
+7. Immediately after a hotfix, the __develop__ patch-level is _must_ be bumped, so the  `"version"` field is changed from `"1.2.2"` → `"1.2.2-1"`
+
+
+
+### The ‘master’ branch
+
+Every commit on __master__ is a new release. The ‘package.json’ `"version"` field always matches a Git tag, and is always in three parts, eg `"0.7.16"` or `"1.2.0"`. The patch-level of releases is always an even number.
+
+
+
+
 Getting Started
 ---------------
 
@@ -167,7 +259,7 @@ Push the release to GitHub…
 
 ### The next round of development
 
-At this point __oe-flow__ diverges from [Vincent Driessen’s branching model](http://nvie.com/posts/a-successful-git-branching-model/), which recommends that development continues without incrementing the version:
+At this point __oe-flow__ diverges from Vincent Driessen’s [branching model](http://nvie.com/posts/a-successful-git-branching-model/), which recommends that development continues without incrementing the version:
 
 - `"0.1.0"` continues as `"0.1.0-1"`, `"0.1.0-2"`, ✖
 - `"4.7.22"` continues as `"4.7.22-1"`, `"4.7.22-2"`, ✖
@@ -205,6 +297,7 @@ Changelog
 + 0.1.0             ready for initial release; 
 + 0.1.1-1           improve .gitgnore (correction); 
 + 0.1.1-2           ‘Getting Started’ section added to ‘README.md’ from ‘oe-flow-getting-started.md’; 
++ 0.1.1-3           ‘Usage’ section added to ‘README.md’ from ‘git-flow-test-2/README.md’; 
 
 
 
